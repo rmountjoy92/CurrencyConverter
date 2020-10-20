@@ -31,9 +31,9 @@ class CurrencyConverter:
             self.error = f"Failed to retrieve symbols from {self.base_url}!"
             return
 
-        symbols = sorted([symbol for symbol, rate in resp["rates"].items()])
+        self.symbols = sorted([symbol for symbol, rate in resp["rates"].items()])
         logging.info(f"Symbols collected from {self.base_url}")
-        return symbols
+        return self.symbols
 
     def convert_currency(self, base_currency, target_currency, currency_amount):
         """
@@ -49,6 +49,14 @@ class CurrencyConverter:
         :return converted_currency_amount: (float) Calculated result,
         with double padded 0
         """
+        self.get_symbols()
+        if base_currency not in self.symbols:
+            self.error = "Base currency not supported."
+            return
+        if target_currency not in self.symbols:
+            self.error = "Target currency not supported."
+            return
+
         try:
             self.rate = get(
                 f"{self.base_url}?base={base_currency}&symbols={target_currency}"

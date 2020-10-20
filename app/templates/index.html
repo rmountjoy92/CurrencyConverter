@@ -1,0 +1,67 @@
+{% extends "global/base.html" %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row justify-content-center mt-5">
+            <div class="col-sm-12 col-md-6 col-lg-4">
+                <div class="card shadow surface2">
+                    <div class="card-body">
+                        <h2 class="text-primary card-title">Currency Converter</h2>
+                        <hr>
+                        <form id="convertCurrencyForm">
+                            <div id='convertCurrencyFormError' class="alert alert-danger d-none" role="alert"></div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Base Currency</label>
+                                <select name="base_currency" class="form-select">
+                                    {% for symbol in symbols %}
+                                        <option value="{{ symbol }}">{{ symbol }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Target Currency</label>
+                                <select name="target_currency" class="form-select">
+                                    {% for symbol in symbols %}
+                                        <option value="{{ symbol }}">{{ symbol }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Currency Amount</label>
+                                <input name="currency_amount" type="text" class="form-control" placeholder="0.00" required>
+                            </div>
+
+                            <div id="convertCurrencyFormSuccess" class="alert alert-info mb-3 d-none" role="alert"></div>
+
+                            <div>
+                                <input class="btn btn-primary btn-block" type="submit" value="Convert">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-4">
+            <div class="col-sm-12 col-md-6 col-lg-4">
+                <a href="{{ url_for('api.root') }}" style="text-decoration: none">
+                    <div class="card shadow">
+                        <div class="card-body text-center">
+                            <i class="material-icons-outlined m-2 text-primary" style="font-size: 2rem">timeline</i><br>
+                            <span style="font-size: 1rem; font-weight: bold">Test out the REST API</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block page_lvl_js %}
+    <script>
+        const convertCurrencyURL = "{{ url_for('site.convert_currency') }}";
+    </script>
+    <script src="static/js/main.js"></script>
+{% endblock page_lvl_js %}

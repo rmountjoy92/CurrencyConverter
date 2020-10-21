@@ -4,6 +4,14 @@ from flask_restx import Api
 from app.config import config
 from app.currency_converter import CurrencyConverter
 
+# set up logging
+logging.basicConfig(
+    filename="app.log",
+    filemode="w",
+    format="%(asctime)s - %(threadName)s - %(name)s - %(levelname)s - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+    level=logging.INFO,
+)
 
 # set up rest-x
 # https://flask-restx.readthedocs.io/en/latest/quickstart.html
@@ -45,14 +53,6 @@ def create_app(config_name):
     :param config_name: (string) name of the chosen config option
     :return app: (Flask application context)
     """
-    logging.basicConfig(
-        filename="app.log",
-        filemode="w",
-        format="%(asctime)s - %(threadName)s - %(name)s - %(levelname)s - %(message)s",
-        datefmt="%Y-%m-%d %H:%M:%S",
-        level=logging.INFO,
-    )
-
     app = Flask(__name__)
     app.config.from_object(config[config_name])
     logging.info("App initialized.")

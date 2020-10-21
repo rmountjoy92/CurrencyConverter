@@ -1,15 +1,13 @@
 from flask import render_template, request, jsonify
-from app.currency_converter import CurrencyConverter
+from app import currency_converter
 from . import site
 
 
 @site.route("/", methods=["GET"])
 def index():
-    converter = CurrencyConverter()
-    symbols = converter.get_symbols()
-    if converter.error:
-        return converter.error, 500
-    return render_template("index.html", symbols=symbols)
+    if currency_converter.error:
+        return currency_converter.error, 500
+    return render_template("index.html", symbols=currency_converter.symbols)
 
 
 @site.route("/convert_currency", methods=["POST"])
@@ -19,14 +17,15 @@ def convert_currency():
     except ValueError:
         return jsonify(data={"error": "Currency amount must be a number."})
 
-    converter = CurrencyConverter()
-    converted_currency_amount = converter.convert_currency(
+    converted_currency_amount = currency_converter.convert_currency(
         request.form.get("base_currency"),
         request.form.get("target_currency"),
         currency_amount,
     )
-    if converter.error:
-        return jsonify(data={"error": converter.error})
+    if currency_converter.error:
+        resp = jsonify(data={"error": currency_converter.error})
+        currency_converter.error = None
+        return resp
     else:
         return jsonify(
             data={

@@ -1,6 +1,5 @@
 from flask_restx import Resource, reqparse
-from app import restx
-from app.currency_converter import CurrencyConverter
+from app import restx, currency_converter
 
 currency_converter_api = restx.namespace(
     "currency_converter", "All API routes related to converting currency"
@@ -17,11 +16,12 @@ currency_converter_api = restx.namespace(
 )
 class Symbols(Resource):
     def get(self):
-        converter = CurrencyConverter()
-        symbols = converter.get_symbols()
-        if converter.error:
-            return {"error": converter.error}, 500
-        return symbols
+        currency_converter.get_symbols()
+        if currency_converter.error:
+            resp = {"error": currency_converter.error}, 500
+            currency_converter.error = None
+            return resp
+        return currency_converter.symbols
 
 
 # ----------------
@@ -63,12 +63,13 @@ convert_currency_parser.add_argument(
 class ConvertCurrency(Resource):
     def post(self):
         args = convert_currency_parser.parse_args()
-        converter = CurrencyConverter()
-        converted_currency_amount = converter.convert_currency(
+        converted_currency_amount = currency_converter.convert_currency(
             args.get("base_currency").upper(),
             args.get("target_currency").upper(),
             args.get("currency_amount"),
         )
-        if converter.error:
-            return {"error": converter.error}, 500
+        if currency_converter.error:
+            resp = {"error": currency_converter.error}, 500
+            currency_converter.error = None
+            return resp
         return converted_currency_amount

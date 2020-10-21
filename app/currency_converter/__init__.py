@@ -13,6 +13,7 @@ class CurrencyConverter:
         self.symbols = None
         self.rate = None
         self.base_url = "https://api.exchangeratesapi.io/latest"
+        self.get_symbols()
 
     def get_symbols(self):
         """
@@ -49,7 +50,6 @@ class CurrencyConverter:
         :return converted_currency_amount: (float) Calculated result,
         with double padded 0
         """
-        self.get_symbols()
         if base_currency not in self.symbols:
             self.error = "Base currency not supported."
             return

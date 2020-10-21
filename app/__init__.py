@@ -2,6 +2,7 @@ import logging
 from flask import Flask
 from flask_restx import Api
 from app.config import config
+from app.currency_converter import CurrencyConverter
 
 
 # set up rest-x
@@ -15,6 +16,9 @@ restx = Api(
     prefix="/api/",
     doc="/api/",
 )
+
+# initialize the currency converter
+currency_converter = CurrencyConverter()
 
 
 # Lazily initialize the flask extensions

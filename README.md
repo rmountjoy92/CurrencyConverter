@@ -6,6 +6,8 @@ Provides a web interface and rest API for calculating currency conversions using
 
 ### Using Docker:
 ```bash
+git clone https://github.com/rmountjoy92/CurrencyConverter.git
+cd CurrencyConverter
 docker build -t CurrencyConverter .
 docker run --publish 5000:5000 CurrencyConverter
 ```

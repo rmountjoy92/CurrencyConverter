@@ -32,7 +32,9 @@ class CurrencyConverter:
             self.error = f"Failed to retrieve symbols from {self.base_url}!"
             return
 
-        self.symbols = sorted([symbol for symbol, rate in resp["rates"].items()])
+        self.symbols = sorted(
+            [symbol for symbol, rate in resp["rates"].items()] + ["EUR"]
+        )
         logging.info(f"Symbols collected from {self.base_url}")
         return self.symbols
 
